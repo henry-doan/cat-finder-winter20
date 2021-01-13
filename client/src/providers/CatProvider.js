@@ -18,8 +18,14 @@ class CatProvider extends Component {
       })
   }
 
-  addCat = (cat) => {
-    axios.post('/api/cats', {cat} )
+  addCat = (newCat) => {
+    let cat = new FormData();
+    cat.append('file', newCat.file);
+    cat.append('nombre', newCat.nombre);
+    cat.append('age', newCat.age);
+    cat.append('color', newCat.color);
+    cat.append('breed', newCat.breed);
+    axios.post('/api/cats', cat )
       .then( res => {    
         const { cats } = this.state
         this.setState({ cats: [ res.data, ...cats ]})

@@ -1,8 +1,13 @@
 import { Component } from 'react';
 import { Form } from 'semantic-ui-react';
+import Dropzone from 'react-dropzone';
 
 class CatForm extends Component {
-  state = { nombre: '', age: 0, breed: '', color: '', avatar: '' }
+  state = { nombre: '', age: 0, breed: '', color: '', file: '' }
+
+  onDrop = (files) => {
+    this.setState({ ...this.state, file: files[0] })
+  }
 
   handleChange = (e) => {
     const { name, value } = e.target
@@ -50,17 +55,50 @@ class CatForm extends Component {
           required
           label='Color'
         />
-        <Form.Input
+        {/* <Form.Input
           name='avatar'
           value={avatar}
           onChange={this.handleChange}
           required
           label='Avatar'
-        />
+        /> */}
+        <Dropzone
+          onDrop={this.onDrop}
+          multiple={false}
+        >
+          {({ getRootProps, getInputProps, isDragActive}) => {
+            return(
+              <div
+                {...getRootProps()}
+                styles={styles.dropzone}
+              >
+                <input { ...getInputProps()} />
+                {
+                  isDragActive ?
+                    <p>Already loaded file but you can change the file</p>:
+                    <p>Drop files here</p>
+                }
+              </div>
+            )
+          }}
+        </Dropzone>
         <Form.Button>Submit</Form.Button>
       </Form>
     )
   }
+}
+
+const styles = {
+  dropzone: {
+    height: "150px",
+    width: "150px",
+    border: "1px dashed black",
+    borderRadius: "5px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "10px",
+  },
 }
 
 export default CatForm;
