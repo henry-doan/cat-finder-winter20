@@ -18,11 +18,23 @@ class CatProvider extends Component {
       })
   }
 
+  addCat = (cat) => {
+    axios.post('/api/cats', {cat} )
+      .then( res => {    
+        const { cats } = this.state
+        this.setState({ cats: [ res.data, ...cats ]})
+      })
+      .catch( res => {
+        console.log(res);
+      })
+  }
+
   render() {
     return(
       <CatContext.Provider value={{
         ...this.state,
         getAllCats: this.getAllCats, 
+        addCat: this.addCat,
       }}>
         { this.props.children }
       </CatContext.Provider>
